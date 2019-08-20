@@ -3,6 +3,7 @@ package osprey
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"encoding/base64"
 	"io/ioutil"
@@ -37,6 +38,7 @@ type osprey struct {
 	provider        *oidc.Provider
 	verifier        *oidc.IDTokenVerifier
 	client          *http.Client
+	mux             sync.Mutex
 }
 
 const ospreyState = "as78*sadf$212"
@@ -47,6 +49,8 @@ type Osprey interface {
 	GetAccessToken(ctx context.Context, username, password, connector string) (*pb.LoginResponse, error)
 	// Authorise handles the authorisation redirect callback from OAuth2 auth flow
 	Authorise(ctx context.Context, code, state, failure string) (*pb.LoginResponse, error)
+	// Ready returns false if the oidcProvider has not been created
+	Ready(ctx context.Context) error
 }
 
 // NewServer returns a new osprey server
@@ -71,13 +75,9 @@ func NewServer(environment, secret, redirectURL, issuerHost, issuerPath, issuerC
 		issuerCAData:    issuerCAData,
 		issuerConnector: issuerConnector,
 	}
-	ctx := oidc.ClientContext(context.Background(), client)
-	provider, err := oidc.NewProvider(ctx, o.issuerURL())
+	_, err = o.getOrCreateOidcProvider()
 	if err != nil {
 		log.Warnf("unable to create oidc provider %q: %v", o.issuerURL(), err)
-	} else {
-		o.provider = provider
-		o.verifier = provider.Verifier(&oidc.Config{ClientID: environment})
 	}
 	return o, nil
 }
@@ -87,6 +87,13 @@ func (o *osprey) issuerURL() string {
 		return fmt.Sprintf("%s/%s", o.issuerHost, o.issuerPath)
 	}
 	return o.issuerHost
+}
+
+func (o *osprey) Ready(ctx context.Context) error {
+	if _, err := o.getOrCreateOidcProvider(); err != nil {
+		return fmt.Errorf("unhealthy: %v", err)
+	}
+	return nil
 }
 
 func (o *osprey) GetAccessToken(ctx context.Context, username, password, connector string) (*pb.LoginResponse, error) {
@@ -172,7 +179,24 @@ func (o *osprey) Authorise(ctx context.Context, code, state, failure string) (*p
 }
 
 func (o *osprey) oauth2Config(ctx context.Context) (*oauth2.Config, error) {
+	oidcProvider, err := o.getOrCreateOidcProvider()
+	if err != nil {
+		return nil, err
+	}
+	return &oauth2.Config{
+		ClientID:     o.environment,
+		ClientSecret: o.secret,
+		Endpoint:     oidcProvider.Endpoint(),
+		Scopes:       []string{"groups", "openid", "profile", "email", "offline_access"},
+		RedirectURL:  o.redirectURL,
+	}, nil
+}
+
+func (o *osprey) getOrCreateOidcProvider() (*oidc.Provider, error) {
+	o.mux.Lock()
+	defer o.mux.Unlock()
 	if o.provider == nil {
+		ctx := oidc.ClientContext(context.Background(), o.client)
 		provider, err := oidc.NewProvider(ctx, o.issuerURL())
 		if err != nil {
 			return nil, fmt.Errorf("unable to create oidc provider %q: %v", o.issuerURL(), err)
@@ -180,13 +204,7 @@ func (o *osprey) oauth2Config(ctx context.Context) (*oauth2.Config, error) {
 		o.provider = provider
 		o.verifier = provider.Verifier(&oidc.Config{ClientID: o.environment})
 	}
-	return &oauth2.Config{
-		ClientID:     o.environment,
-		ClientSecret: o.secret,
-		Endpoint:     o.provider.Endpoint(),
-		Scopes:       []string{"groups", "openid", "profile", "email", "offline_access"},
-		RedirectURL:  o.redirectURL,
-	}, nil
+	return o.provider, nil
 }
 
 // ReadAndEncodeFile load the file contents and base64 encodes it

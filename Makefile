@@ -2,13 +2,13 @@ files := $(shell find . -path ./vendor -prune -path ./pb -prune -o -name '*.go' 
 pkgs := $(shell go list ./... | grep -v /vendor/ )
 
 git_rev := $(shell git rev-parse --short HEAD)
-git_tag := $(shell git tag --points-at=$(git_rev))
+git_tag :=html-2
 release_date := $(shell date +%d-%m-%Y)
 latest_git_tag := $(shell git for-each-ref --format="%(tag)" --sort=-taggerdate refs/tags | head -1)
 latest_git_rev := $(shell git rev-list --abbrev-commit -n 1 $(latest_git_tag))
 version := $(if $(git_tag),$(git_tag),dev-$(git_rev))
 build_time := $(shell date -u)
-ldflags := -X "github.com/sky-uk/osprey/cmd.version=$(version)" -X "github.com/sky-uk/osprey/cmd.buildTime=$(build_time)"
+ldflags := -X "github.com/mdanko/osprey/cmd.version=$(version)" -X "github.com/mdanko/osprey/cmd.buildTime=$(build_time)"
 
 cwd= $(shell pwd)
 build_dir := $(cwd)/build/bin
@@ -135,11 +135,11 @@ else
 endif
 endif
 
-image := skycirrus/osprey
+image := mdanko/osprey
 
 docker : build
 	@echo "== docker"
-	docker build -t local/osprey:latest .
+	docker build -t local/osprey:html-2 .
 
 release-docker : docker
 ifeq ($(strip $(git_tag)),)
@@ -148,11 +148,13 @@ else
 	@echo "== release docker"
 	@echo "releasing $(image):$(git_tag)"
 	@docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
-	docker tag local/opsrey:latest $(image):$(git_tag)
+	#docker tag local/opsrey:html-2 $(image):$(git_tag)
+	
 	docker push $(image):$(git_tag)
+	#docker push $(image):$(git_tag)
 	@if [ "$(git_rev)" = "$(latest_git_rev)" ]; then \
-		docker tag $(image):$(git_tag) $(image):latest
+		docker tag $(image):$(git_tag) $(image):html-2
 		echo "updating latest image"; \
-		echo docker push $(image):latest ; \
+		echo docker push $(image):html-2 ; \
 	fi;
 endif
