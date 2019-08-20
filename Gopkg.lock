@@ -283,12 +283,22 @@
   revision = "32fa128f234d041f196a9f3e0fea5ac9772c08e1"
 
 [[projects]]
-  digest = "1:9e43e39ca02c48621b9ba25c4258757bd039f5717d895cd486aec76e217a4625"
+  branch = "use-html-parser-for-login-flow"
+  digest = "1:1e12a2d4d2241dd0afcad786f4543010951fcdabf9186ad5ba7548f97998005d"
   name = "github.com/markdanko/osprey"
-  packages = ["cmd"]
+  packages = [
+    "cmd",
+    "common/pb",
+    "common/web",
+    "e2e/ldaptest",
+    "e2e/ssltest",
+    "e2e/util",
+    "server/connector",
+    "server/osprey",
+    "server/web",
+  ]
   pruneopts = "UT"
-  revision = "0b8fa5c5ca588d174c792caeb4ef2dcde90a7f58"
-  version = "v1.3.0"
+  revision = "c3c3a21d85400e482a1658aee7285c2ccffae431"
 
 [[projects]]
   branch = "master"
@@ -407,7 +417,7 @@
 
 [[projects]]
   branch = "use-html-parser-for-login-flow"
-  digest = "1:40d266beaa2963354c4ff8d772a44c8d41664e529561918eebfed7d70fabdbe3"
+  digest = "1:39c8df3befd11f2ad94ef81f2553284363c1d8c4e5d242258fe47c458f413e10"
   name = "github.com/sky-uk/osprey"
   packages = [
     "client",
@@ -422,7 +432,6 @@
     "e2e/util",
     "server/connector",
     "server/osprey",
-    "server/web",
   ]
   pruneopts = "UT"
   revision = "6aa4aabcc346880b6bd1e75bf37ed3a99eb024d2"
@@ -724,6 +733,14 @@
     "github.com/golang/protobuf/proto",
     "github.com/jaytaylor/html2text",
     "github.com/markdanko/osprey/cmd",
+    "github.com/markdanko/osprey/common/pb",
+    "github.com/markdanko/osprey/common/web",
+    "github.com/markdanko/osprey/e2e/ldaptest",
+    "github.com/markdanko/osprey/e2e/ssltest",
+    "github.com/markdanko/osprey/e2e/util",
+    "github.com/markdanko/osprey/server/connector",
+    "github.com/markdanko/osprey/server/osprey",
+    "github.com/markdanko/osprey/server/web",
     "github.com/mitchellh/go-homedir",
     "github.com/onsi/ginkgo",
     "github.com/onsi/gomega",
@@ -738,9 +755,7 @@
     "github.com/sky-uk/osprey/e2e/ospreytest",
     "github.com/sky-uk/osprey/e2e/ssltest",
     "github.com/sky-uk/osprey/e2e/util",
-    "github.com/sky-uk/osprey/server/connector",
     "github.com/sky-uk/osprey/server/osprey",
-    "github.com/sky-uk/osprey/server/web",
     "github.com/spf13/cobra",
     "golang.org/x/crypto/ssh/terminal",
     "golang.org/x/net/html",

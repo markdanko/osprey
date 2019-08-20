@@ -3,7 +3,7 @@ package cmd
 import (
 	"time"
 
-	"github.com/sky-uk/osprey/server/osprey"
+	"github.com/markdanko/osprey/server/osprey"
 	"github.com/spf13/cobra"
 
 	log "github.com/sirupsen/logrus"
