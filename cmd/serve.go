@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/cobra"
 
 	log "github.com/sirupsen/logrus"
-	webClient "github.com/sky-uk/osprey/common/web"
-	webServer "github.com/sky-uk/osprey/server/web"
+	webClient "github.com/markdanko/osprey/common/web"
+	webServer "github.com/markdanko/osprey/server/web"
 )
 
 const defaultGraceShutdownPeriod = 15 * time.Second

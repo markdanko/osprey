@@ -283,6 +283,14 @@
   revision = "32fa128f234d041f196a9f3e0fea5ac9772c08e1"
 
 [[projects]]
+  digest = "1:9e43e39ca02c48621b9ba25c4258757bd039f5717d895cd486aec76e217a4625"
+  name = "github.com/markdanko/osprey"
+  packages = ["cmd"]
+  pruneopts = "UT"
+  revision = "0b8fa5c5ca588d174c792caeb4ef2dcde90a7f58"
+  version = "v1.3.0"
+
+[[projects]]
   branch = "master"
   digest = "1:bcdd3c95159bf18932c5a3bc7da945c19dd477f54d0d24f4ea04b31076468681"
   name = "github.com/mattn/go-runewidth"
@@ -399,12 +407,11 @@
 
 [[projects]]
   branch = "use-html-parser-for-login-flow"
-  digest = "1:7d150e3281fda20a499993dfda5a76bde7f0774e880ac68b169c73526481cb0b"
+  digest = "1:40d266beaa2963354c4ff8d772a44c8d41664e529561918eebfed7d70fabdbe3"
   name = "github.com/sky-uk/osprey"
   packages = [
     "client",
     "client/kubeconfig",
-    "cmd",
     "common/pb",
     "common/web",
     "e2e/clitest",
@@ -716,13 +723,13 @@
     "github.com/coreos/go-oidc",
     "github.com/golang/protobuf/proto",
     "github.com/jaytaylor/html2text",
+    "github.com/markdanko/osprey/cmd",
     "github.com/mitchellh/go-homedir",
     "github.com/onsi/ginkgo",
     "github.com/onsi/gomega",
     "github.com/sirupsen/logrus",
     "github.com/sky-uk/osprey/client",
     "github.com/sky-uk/osprey/client/kubeconfig",
-    "github.com/sky-uk/osprey/cmd",
     "github.com/sky-uk/osprey/common/pb",
     "github.com/sky-uk/osprey/common/web",
     "github.com/sky-uk/osprey/e2e/clitest",

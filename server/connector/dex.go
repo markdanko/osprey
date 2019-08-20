@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/antchfx/htmlquery"
-	"github.com/sky-uk/osprey/common/pb"
+	"github.com/markdanko/osprey/common/pb"
 	"golang.org/x/net/html"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

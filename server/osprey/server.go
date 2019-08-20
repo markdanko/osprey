@@ -11,8 +11,8 @@ import (
 
 	"github.com/coreos/go-oidc"
 	"github.com/sirupsen/logrus"
-	"github.com/sky-uk/osprey/common/pb"
-	"github.com/sky-uk/osprey/server/connector"
+	"github.com/markdanko/osprey/common/pb"
+	"github.com/markdanko/osprey/server/connector"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
